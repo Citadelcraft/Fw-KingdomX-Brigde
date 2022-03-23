@@ -1,14 +1,18 @@
 package com.github.citadelcraft.Handler;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.kingdoms.constants.kingdom.Kingdom;
 import org.kingdoms.constants.player.KingdomPlayer;
+import org.kingdoms.data.DataHandler;
+import org.kingdoms.data.DataManager;
 import org.kingdoms.events.general.KingdomCreateEvent;
 import org.kingdoms.events.general.KingdomDisbandEvent;
 import org.kingdoms.events.members.KingdomJoinEvent;
@@ -52,6 +56,7 @@ public class KingdomsXFw extends TeamHandler implements Listener{
       }
       
       public TeamHandler.Relation getRelationBetween(String paramString1, String paramString2) {
+        //TODO Change Relation Part
         Kingdom kingdom1 = getKingdom(paramString1), kingdom2 = getKingdom(paramString2);
         if (kingdom1 == null || kingdom2 == null)
           return null; 
@@ -77,12 +82,15 @@ public class KingdomsXFw extends TeamHandler implements Listener{
       
       public List<String> getAllTeams() {
         ArrayList<String> arrayList = new ArrayList();
-        for (UUID uUID : GameManagement.getKingdomManager().getKingdomList().keySet())
-          arrayList.add(uUID.toString()); 
+        Collection<Kingdom> kingdoms = DataHandler.get().getKingdomManager().getKingdoms();
+        kingdoms.forEach(kingdom -> {
+          arrayList.add(kingdom.getId().toString()); 
+        });
         return arrayList;
       }
       
       public List<Player> getMembersWithRole(String paramString, TeamHandler.Role paramRole) {
+        //TODO Change member ROLE
         Kingdom kingdom = getKingdom(paramString);
         if (kingdom == null)
           return Collections.emptyList(); 
@@ -101,6 +109,7 @@ public class KingdomsXFw extends TeamHandler implements Listener{
       }
       
       public String getPlayerTeam(Object paramObject) {
+        //TODO Get TeamPlayer
         if (paramObject instanceof String)
           paramObject = FactionWars.get().getServer().getPlayer((String)paramObject); 
         if (paramObject == null)
