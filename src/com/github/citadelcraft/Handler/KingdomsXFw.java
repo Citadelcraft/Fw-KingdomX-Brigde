@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.kingdoms.constants.kingdom.Kingdom;
+import org.kingdoms.constants.group.Kingdom;
+import org.kingdoms.constants.group.model.KingdomRelation;
+import org.kingdoms.constants.player.DefaultKingdomPermission;
 import org.kingdoms.constants.player.KingdomPlayer;
 import org.kingdoms.data.DataHandler;
-import org.kingdoms.data.DataManager;
 import org.kingdoms.events.general.KingdomCreateEvent;
 import org.kingdoms.events.general.KingdomDisbandEvent;
 import org.kingdoms.events.members.KingdomJoinEvent;
@@ -20,7 +20,6 @@ import org.kingdoms.events.members.KingdomLeaveEvent;
 
 import io.github.guipenedo.factionwars.FactionWars;
 import io.github.guipenedo.factionwars.api.TeamHandler;
-import io.github.guipenedo.factionwars.gamemodes.GamemodeManager;
 import io.github.guipenedo.factionwars.handler.TeamHandlerListener;
 
 public class KingdomsXFw extends TeamHandler implements Listener{
@@ -51,16 +50,16 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         ArrayList<Player> arrayList = new ArrayList();
         kingdom.getOnlineMembers().forEach(Player -> {
             arrayList.add(Player);
-        }
+        });
         return arrayList;
       }
       
       public TeamHandler.Relation getRelationBetween(String paramString1, String paramString2) {
-        //TODO Change Relation Part
-        Kingdom kingdom1 = getKingdom(paramString1), kingdom2 = getKingdom(paramString2);
+        Kingdom kingdom1 = getKingdom(paramString1);
+        Kingdom kingdom2 = getKingdom(paramString2);
         if (kingdom1 == null || kingdom2 == null)
           return null; 
-        if (kingdom1.isAllianceWith(kingdom2))
+        if (kingdom1.hasAttribute(kingdom2, KingdomRelation.Attribute.CEASEFIRE))
           return TeamHandler.Relation.ALLY; 
         return TeamHandler.Relation.NEUTRAL;
       }
@@ -90,18 +89,19 @@ public class KingdomsXFw extends TeamHandler implements Listener{
       }
       
       public List<Player> getMembersWithRole(String paramString, TeamHandler.Role paramRole) {
-        //TODO Change member ROLE
         Kingdom kingdom = getKingdom(paramString);
         if (kingdom == null)
           return Collections.emptyList(); 
         ArrayList<Player> arrayList = new ArrayList();
-        if (paramRole == TeamHandler.Role.ADMIN && FactionWars.get().getServer().getPlayer(kingdom.getKing()) != null) {
-          arrayList.add(FactionWars.get().getServer().getPlayer(kingdom.getKing()));
+        if (paramRole == TeamHandler.Role.ADMIN && FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().toString()) != null) {
+          arrayList.add(FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().toString()));
         } else if (paramRole == TeamHandler.Role.MODERATOR) {
-          for (KingdomPlayer kingdomPlayer : kingdom.getOnlineMembers()) {
-            if (kingdomPlayer.getRank() == Rank.MODS)
-              arrayList.add(kingdomPlayer.getPlayer()); 
-          } 
+          kingdom.getOnlineMembers().forEach(player -> {
+            KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
+            if (kp.hasPermission(DefaultKingdomPermission.MANAGE_RANKS)){
+              arrayList.add(kp.getPlayer());
+            }
+          });
         } else if (paramRole == TeamHandler.Role.NORMAL) {
           return getOnlinePlayers(paramString);
         } 
@@ -109,18 +109,13 @@ public class KingdomsXFw extends TeamHandler implements Listener{
       }
       
       public String getPlayerTeam(Object paramObject) {
-        //TODO Get TeamPlayer
         if (paramObject instanceof String)
           paramObject = FactionWars.get().getServer().getPlayer((String)paramObject); 
         if (paramObject == null)
           return null; 
         if (paramObject instanceof Player) {
-          KingdomPlayer kingdomPlayer = GameManagement.getPlayerManager().getSession((Player)paramObject);
-          return (kingdomPlayer != null && kingdomPlayer.getKingdomUuid() != null) ? kingdomPlayer.getKingdomUuid().toString() : null;
-        } 
-        if (paramObject instanceof OfflinePlayer) {
-          OfflineKingdomPlayer offlineKingdomPlayer = GameManagement.getPlayerManager().getOfflineKingdomPlayer((OfflinePlayer)paramObject);
-          return (offlineKingdomPlayer != null && offlineKingdomPlayer.getKingdomUuid() != null) ? offlineKingdomPlayer.getKingdomUuid().toString() : null;
+          KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
+          return (kingdomPlayer != null && kingdomPlayer.getKingdom().getId() != null) ? kingdomPlayer.getKingdom().getId().toString() : null;
         } 
         return null;
       }
