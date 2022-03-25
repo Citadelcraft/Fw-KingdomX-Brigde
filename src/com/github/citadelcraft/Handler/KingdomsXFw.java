@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,8 +60,11 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         Kingdom kingdom2 = getKingdom(paramString2);
         if (kingdom1 == null || kingdom2 == null)
           return null; 
-        if (kingdom1.hasAttribute(kingdom2, KingdomRelation.Attribute.CEASEFIRE))
-          return TeamHandler.Relation.ALLY; 
+        if (kingdom1.getRelationWith(kingdom2) == KingdomRelation.ALLY || kingdom1.getRelationWith(kingdom2) == KingdomRelation.NATION)
+          return TeamHandler.Relation.ALLY;
+        if (kingdom1.getRelationWith(kingdom2) == KingdomRelation.ENEMY)
+          return TeamHandler.Relation.ENEMY;
+
         return TeamHandler.Relation.NEUTRAL;
       }
       
@@ -116,7 +120,11 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         if (paramObject instanceof Player) {
           KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
           return (kingdomPlayer != null && kingdomPlayer.getKingdom().getId() != null) ? kingdomPlayer.getKingdom().getId().toString() : null;
-        } 
+        }
+        if (paramObject instanceof OfflinePlayer){
+          KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
+          return (kingdomPlayer != null && kingdomPlayer.getKingdom().getId() != null) ? kingdomPlayer.getKingdom().getId().toString() : null;
+        }
         return null;
       }
       

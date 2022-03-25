@@ -1,10 +1,12 @@
 name: Fw-Kingdoms-brigde
 author: Nostyll
-version: 1.0.0
+version: 1.0.1
 website: www.citadelcraft.com
 api-version: 1.13
 prefix: FactionsWar KingdomsX
-depend: [Kingdoms, FactionWars]
-description: Bring Levels to KingdomsX
+loadbefore: [FactionWars]
+depend: [FactionWars]
+softdepend: [Kingdoms]
+description: Bring Factionswar to KingdomsX
 main: com.github.citadelcraft.KingdomsXBrigde
 
