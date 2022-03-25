@@ -97,8 +97,8 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         if (kingdom == null)
           return Collections.emptyList(); 
         ArrayList<Player> arrayList = new ArrayList();
-        if (paramRole == TeamHandler.Role.ADMIN && FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().toString()) != null) {
-          arrayList.add(FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().toString()));
+        if (paramRole == TeamHandler.Role.ADMIN && FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()) != null) {
+          arrayList.add(FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()));
         } else if (paramRole == TeamHandler.Role.MODERATOR) {
           kingdom.getOnlineMembers().forEach(player -> {
             KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
