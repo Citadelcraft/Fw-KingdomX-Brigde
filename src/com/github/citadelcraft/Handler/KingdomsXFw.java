@@ -119,11 +119,13 @@ public class KingdomsXFw extends TeamHandler implements Listener{
           return null; 
         if (paramObject instanceof Player) {
           KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
-          return (kingdomPlayer != null && kingdomPlayer.getKingdom().getId() != null) ? kingdomPlayer.getKingdom().getId().toString() : null;
+          Kingdom kingdom = kingdomPlayer.getKingdom();
+          return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getId().toString() : null;
         }
         if (paramObject instanceof OfflinePlayer){
           KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
-          return (kingdomPlayer != null && kingdomPlayer.getKingdom().getId() != null) ? kingdomPlayer.getKingdom().getId().toString() : null;
+          Kingdom kingdom = kingdomPlayer.getKingdom();
+          return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getId().toString() : null;
         }
         return null;
       }
