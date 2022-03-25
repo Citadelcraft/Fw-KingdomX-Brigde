@@ -87,7 +87,7 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         ArrayList<String> arrayList = new ArrayList();
         Collection<Kingdom> kingdoms = DataHandler.get().getKingdomManager().getKingdoms();
         kingdoms.forEach(kingdom -> {
-          arrayList.add(kingdom.getId().toString()); 
+          arrayList.add(kingdom.getName()); 
         });
         return arrayList;
       }
@@ -120,12 +120,12 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         if (paramObject instanceof Player) {
           KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
           Kingdom kingdom = kingdomPlayer.getKingdom();
-          return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getId().toString() : null;
+          return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getName() : null;
         }
         if (paramObject instanceof OfflinePlayer){
           KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
           Kingdom kingdom = kingdomPlayer.getKingdom();
-          return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getId().toString() : null;
+          return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getName() : null;
         }
         return null;
       }
