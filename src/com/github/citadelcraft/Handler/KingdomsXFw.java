@@ -26,26 +26,21 @@ import io.github.guipenedo.factionwars.handler.TeamHandlerListener;
 public class KingdomsXFw extends TeamHandler implements Listener{
     
     public KingdomsXFw(String name) {
-        //you may add any other additional setup you need here
         super(name);
     }
-
-    private Kingdom getKingdom(String paramString) {
-        return Kingdom.getKingdom(paramString);
-      }
       
-      public String getTeamName(String paramString) {
-        Kingdom kingdom = getKingdom(paramString);
+      public String getTeamName(String KingdomName) {
+        Kingdom kingdom = Kingdom.getKingdom(KingdomName);
         return (kingdom != null) ? kingdom.getName() : null;
       }
       
-      public String getTeamIdByName(String paramString) {
-        Kingdom kingdom = getKingdom(paramString);
+      public String getTeamIdByName(String KingdomName) {
+        Kingdom kingdom = Kingdom.getKingdom(KingdomName);
         return (kingdom == null) ? null : kingdom.getId().toString();
       }
       
-      public List<Player> getOnlinePlayers(String paramString) {
-        Kingdom kingdom = getKingdom(paramString);
+      public List<Player> getOnlinePlayers(String KingdomName) {
+        Kingdom kingdom = Kingdom.getKingdom(KingdomName);
         if (kingdom == null)
           return Collections.emptyList(); 
         ArrayList<Player> arrayList = new ArrayList();
@@ -55,12 +50,12 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         return arrayList;
       }
       
-      public TeamHandler.Relation getRelationBetween(String paramString1, String paramString2) {
-        Kingdom kingdom1 = getKingdom(paramString1);
-        Kingdom kingdom2 = getKingdom(paramString2);
+      public TeamHandler.Relation getRelationBetween(String KingdomName1, String KingdomName2) {
+        Kingdom kingdom1 = Kingdom.getKingdom(KingdomName1);
+        Kingdom kingdom2 = Kingdom.getKingdom(KingdomName2);
         if (kingdom1 == null || kingdom2 == null)
           return null; 
-        if (kingdom1.getRelationWith(kingdom2) == KingdomRelation.ALLY || kingdom1.getRelationWith(kingdom2) == KingdomRelation.NATION)
+        if (kingdom1.getRelationWith(kingdom2) == KingdomRelation.ALLY)
           return TeamHandler.Relation.ALLY;
         if (kingdom1.getRelationWith(kingdom2) == KingdomRelation.ENEMY)
           return TeamHandler.Relation.ENEMY;
@@ -68,18 +63,18 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         return TeamHandler.Relation.NEUTRAL;
       }
       
-      public String getBankName(String paramString) {
-        Kingdom kingdom = getKingdom(paramString);
+      public String getBankName(String KingdomName) {
+        Kingdom kingdom = Kingdom.getKingdom(KingdomName);
         if (kingdom == null)
           return null; 
-        return FactionWars.get().getServer().getOfflinePlayer(kingdom.getKing().getPlayer().toString()).getName();
+        return String.valueOf(kingdom.getBank());
       }
       
-      public void sendMessage(String paramString1, String paramString2) {
-        Kingdom kingdom = getKingdom(paramString1);
+      public void sendMessage(String KingdomName, String msg) {
+        Kingdom kingdom = Kingdom.getKingdom(KingdomName);
         if (kingdom != null)
           kingdom.getOnlineMembers().forEach(player -> {
-              player.sendMessage(paramString2);
+              player.sendMessage(msg);
         });
       }
       
@@ -92,22 +87,22 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         return arrayList;
       }
       
-      public List<Player> getMembersWithRole(String paramString, TeamHandler.Role paramRole) {
-        Kingdom kingdom = getKingdom(paramString);
+      public List<Player> getMembersWithRole(String KingdomName, TeamHandler.Role role) {
+        Kingdom kingdom = Kingdom.getKingdom(KingdomName);
         if (kingdom == null)
           return Collections.emptyList(); 
         ArrayList<Player> arrayList = new ArrayList();
-        if (paramRole == TeamHandler.Role.ADMIN && FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()) != null) {
+        if (role == TeamHandler.Role.ADMIN && FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()) != null) {
           arrayList.add(FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()));
-        } else if (paramRole == TeamHandler.Role.MODERATOR) {
+        } else if (role == TeamHandler.Role.MODERATOR) {
           kingdom.getOnlineMembers().forEach(player -> {
             KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
             if (kp.hasPermission(DefaultKingdomPermission.MANAGE_RANKS)){
               arrayList.add(kp.getPlayer());
             }
           });
-        } else if (paramRole == TeamHandler.Role.NORMAL) {
-          return getOnlinePlayers(paramString);
+        } else if (role == TeamHandler.Role.NORMAL) {
+          return getOnlinePlayers(KingdomName);
         } 
         return arrayList;
       }
@@ -122,22 +117,17 @@ public class KingdomsXFw extends TeamHandler implements Listener{
           Kingdom kingdom = kingdomPlayer.getKingdom();
           return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getName() : null;
         }
-        if (paramObject instanceof OfflinePlayer){
-          KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
-          Kingdom kingdom = kingdomPlayer.getKingdom();
-          return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getName() : null;
-        }
         return null;
       }
       
       @EventHandler
       public void onKingdomMemberJoin(KingdomJoinEvent event) {
-        TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdom().getId()));
+        TeamHandlerListener.onTeamChange(event.getPlayer().getPlayer());
       }
       
       @EventHandler
       public void onKingdomMemberLeave(KingdomLeaveEvent event) {
-        TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdomPlayer().getKingdomId()));
+        TeamHandlerListener.onTeamChange(event.getKingdomPlayer().getPlayer());
       }
       
       @EventHandler
@@ -148,11 +138,6 @@ public class KingdomsXFw extends TeamHandler implements Listener{
       @EventHandler
       public void onKingdomDelete(KingdomDisbandEvent event) {
         TeamHandlerListener.onTeamDelete(event.getKingdom().getId().toString());
-      }
-
-      @EventHandler
-      public void NexusInteraction(KingdomItemInteractEvent<? extends KingdomItem<?>> event){
-        
       }
 
 }
