@@ -150,4 +150,9 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         TeamHandlerListener.onTeamDelete(event.getKingdom().getId().toString());
       }
 
+      @EventHandler
+      public void NexusInteraction(KingdomItemInteractEvent<? extends KingdomItem<?>> event){
+        
+      }
+
 }
