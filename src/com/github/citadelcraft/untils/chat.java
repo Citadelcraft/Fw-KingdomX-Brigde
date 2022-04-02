@@ -1,4 +1,4 @@
-package com.github.citadelcraft.untils;
+package com.github.citadelcraft.Untils;
 
 import org.bukkit.entity.*;
 import org.bukkit.command.*;

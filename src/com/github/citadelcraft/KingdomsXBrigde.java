@@ -1,7 +1,7 @@
 package com.github.citadelcraft;
 
 import com.github.citadelcraft.Handler.KingdomsXFw;
-import com.github.citadelcraft.untils.chat;
+import com.github.citadelcraft.Untils.chat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
