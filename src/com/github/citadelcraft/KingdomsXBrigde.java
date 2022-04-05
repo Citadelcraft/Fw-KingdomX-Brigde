@@ -51,7 +51,7 @@ public class KingdomsXBrigde extends JavaPlugin implements FactionWarsAddonPlugi
 
 	@Override
 	public TeamHandler getTeamHandler() {
-		return new KingdomsXFw("KingdomsXBrigde"); //CustomTeamHandler extends TeamHandler. The String parameter is the name that FactionWars will display in the console (your plugin name)
+		return new KingdomsXFw("KingdomsXBrigde", this); //CustomTeamHandler extends TeamHandler. The String parameter is the name that FactionWars will display in the console (your plugin name)
 	}
 
 
