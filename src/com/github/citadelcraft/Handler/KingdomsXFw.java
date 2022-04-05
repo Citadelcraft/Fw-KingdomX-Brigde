@@ -74,10 +74,18 @@ public class KingdomsXFw extends TeamHandler implements Listener{
       }
       
       public String getBankName(String KingdomName) {
+        return null;
+      }
+      
+      public double getBalance(String KingdomName) {
         Kingdom kingdom = Kingdom.getKingdom(KingdomName);
-        if (kingdom == null)
-          return null; 
-        return String.valueOf(kingdom.getBank());
+        return (kingdom == null) ? 0.0D : kingdom.getResourcePoints();
+      }
+      
+      public void changeBalance(String KingdomName, double rp) {
+        Kingdom kingdom = Kingdom.getKingdom(KingdomName);
+        if (kingdom != null)
+        kingdom.setResourcePoints(Double.doubleToLongBits(kingdom.getResourcePoints() + rp));
       }
       
       public void sendMessage(String KingdomName, String msg) {
@@ -171,28 +179,33 @@ public class KingdomsXFw extends TeamHandler implements Listener{
       @EventHandler
       public void onPlayerLeaveWar(FactionWarsWarEndEvent event) {
         WarMap map = event.getMap();
-        boolean tied = event.isTied();
 
         Kingdom winner = Kingdom.getKingdom(event.getWinner());
         Kingdom loser = Kingdom.getKingdom(event.getLoser());
 
         winner.getOnlineMembers().forEach(player ->{
+          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
           if (player.getWorld().getName().equals(map.getName())){
             if (winner.getHome() != null){
               player.teleport(winner.getHome());
             }else if (winner.getNexus() != null){
               player.teleport(winner.getNexus().toBukkitLocation());
             }
+            kp.setPvp(false);
+            ActionBar.sendActionBar(plugin, player, ChatColor.DARK_RED + "Pvp Mode OFF", 5 * 20);
           }
         });
 
         loser.getOnlineMembers().forEach(player -> {
+          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
           if (player.getWorld().getName().equals(map.getName())){
             if (loser.getHome() != null){
               player.teleport(loser.getHome());
             }else if (loser.getNexus() != null){
               player.teleport(loser.getNexus().toBukkitLocation());
             }
+            kp.setPvp(false);
+            ActionBar.sendActionBar(plugin, player, ChatColor.DARK_RED + "Pvp Mode OFF", 5 * 20);
           }
         });
 
@@ -212,13 +225,13 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         team1players.forEach(player -> {
           KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
           kp.setPvp(true);
-          ActionBar.sendActionBar(plugin, player, ChatColor.DARK_AQUA + "Pvp Mode Active", 5 * 20);
+          ActionBar.sendActionBar(plugin, player, ChatColor.DARK_AQUA + "Pvp Mode ON", 5 * 20);
         });
         
         team2players.forEach(player -> {
           KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
           kp.setPvp(true);
-          ActionBar.sendActionBar(plugin, player, ChatColor.DARK_AQUA + "Pvp Mode Active", 5 * 20);
+          ActionBar.sendActionBar(plugin, player, ChatColor.DARK_AQUA + "Pvp Mode ON", 5 * 20);
         });
 
       }
