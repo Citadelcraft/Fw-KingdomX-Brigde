@@ -20,3 +20,4 @@ jboss/server/minimal/work/**/*
 pom.xml
 .vscode/settings.json
 target/
+dependency-reduced-pom.xml
