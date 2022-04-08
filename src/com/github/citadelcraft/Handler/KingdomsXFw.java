@@ -1,17 +1,15 @@
 package com.github.citadelcraft.Handler;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.cryptomorin.xseries.messages.ActionBar;
 import com.github.citadelcraft.KingdomsXBrigde;
 
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.group.model.KingdomRelation;
 import org.kingdoms.constants.player.DefaultKingdomPermission;
@@ -21,8 +19,6 @@ import org.kingdoms.data.DataHandler;
 
 import io.github.guipenedo.factionwars.FactionWars;
 import io.github.guipenedo.factionwars.api.TeamHandler;
-import io.github.guipenedo.factionwars.api.events.*;
-import io.github.guipenedo.factionwars.models.WarMap;
 
 public class KingdomsXFw extends TeamHandler{
 
@@ -83,7 +79,7 @@ public class KingdomsXFw extends TeamHandler{
       public void changeBalance(String KingdomName, double rp) {
         Kingdom kingdom = Kingdom.getKingdom(KingdomName);
         if (kingdom != null)
-        kingdom.setResourcePoints(Double.doubleToLongBits(kingdom.getResourcePoints() + rp));
+        kingdom.setResourcePoints(BigDecimal.valueOf(kingdom.getResourcePoints() + rp).longValue());
       }
       
       public void sendMessage(String Kingdomname1, String Kingdomname2) {
@@ -140,83 +136,4 @@ public class KingdomsXFw extends TeamHandler{
         }
         return null;
       }
-
-      ///called when a player leaves a match
-      @EventHandler
-      public void onPlayerLeaveWar(FactionWarsPlayerLeaveWarEvent event) {
-       
-       WarMap map = event.getMap();
-       Player player = event.getPlayer();
-       KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
-       Kingdom kingdom = kp.getKingdom();
-
-       if (kingdom.getHome() != null){
-         player.teleport(kingdom.getHome());
-       }else if (kingdom.getNexus() != null){
-         player.teleport(kingdom.getNexus().toBukkitLocation());
-       }
-
-      }
-
-      ///called when a war ends
-      @EventHandler
-      public void onPlayerLeaveWar(FactionWarsWarEndEvent event) {
-        WarMap map = event.getMap();
-
-        Kingdom winner = Kingdom.getKingdom(event.getWinner());
-        Kingdom loser = Kingdom.getKingdom(event.getLoser());
-
-        winner.getOnlineMembers().forEach(player ->{
-          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
-          if (player.getWorld().getName().equals(map.getName())){
-            if (winner.getHome() != null){
-              player.teleport(winner.getHome());
-            }else if (winner.getNexus() != null){
-              player.teleport(winner.getNexus().toBukkitLocation());
-            }
-            kp.setPvp(false);
-            ActionBar.sendActionBar(plugin, player, ChatColor.DARK_RED + "Pvp Mode OFF", 5 * 20);
-          }
-        });
-
-        loser.getOnlineMembers().forEach(player -> {
-          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
-          if (player.getWorld().getName().equals(map.getName())){
-            if (loser.getHome() != null){
-              player.teleport(loser.getHome());
-            }else if (loser.getNexus() != null){
-              player.teleport(loser.getNexus().toBukkitLocation());
-            }
-            kp.setPvp(false);
-            ActionBar.sendActionBar(plugin, player, ChatColor.DARK_RED + "Pvp Mode OFF", 5 * 20);
-          }
-        });
-
-        
-      }
-
-      ///called when a war starts
-      @EventHandler
-      public void onPlayerLeaveWar(FactionWarsWarStartEvent event) {
-        Kingdom team1 = Kingdom.getKingdom(event.getTeam1());
-        Kingdom team2 = Kingdom.getKingdom(event.getTeam2());
-        WarMap map = event.getMap();
-
-        ArrayList<Player> team1players = event.getTeam1Players();
-        ArrayList<Player> team2players = event.getTeam2Players();
-
-        team1players.forEach(player -> {
-          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
-          kp.setPvp(true);
-          ActionBar.sendActionBar(plugin, player, ChatColor.DARK_AQUA + "Pvp Mode ON", 5 * 20);
-        });
-        
-        team2players.forEach(player -> {
-          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
-          kp.setPvp(true);
-          ActionBar.sendActionBar(plugin, player, ChatColor.DARK_AQUA + "Pvp Mode ON", 5 * 20);
-        });
-
-      }
-
 }

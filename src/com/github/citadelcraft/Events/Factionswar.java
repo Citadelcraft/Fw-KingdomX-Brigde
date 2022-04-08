@@ -3,12 +3,13 @@ package com.github.citadelcraft.Events;
 import java.util.ArrayList;
 
 import com.cryptomorin.xseries.messages.ActionBar;
+import com.cryptomorin.xseries.messages.Titles;
 import com.github.citadelcraft.KingdomsXBrigde;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.player.KingdomPlayer;
 
@@ -22,22 +23,26 @@ public class Factionswar implements Listener{
           @EventHandler
           public void onPlayerLeaveWar(FactionWarsPlayerLeaveWarEvent event) {
            
-           WarMap map = event.getMap();
            Player player = event.getPlayer();
            KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
            Kingdom kingdom = kp.getKingdom();
     
            if (kingdom.getHome() != null){
              player.teleport(kingdom.getHome());
+             Titles.sendTitle(player, 10, 30, 20, "Teleported", "We moved you to your Kingdom Home!");
            }else if (kingdom.getNexus() != null){
              player.teleport(kingdom.getNexus().toBukkitLocation());
+             Titles.sendTitle(player, 10, 30, 20, "Teleported", "We moved you to your Kingdom Nexus!");
+           }else{
+             player.teleport(player.getWorld().getSpawnLocation(), TeleportCause.PLUGIN);
+             Titles.sendTitle(player, 10, 30, 20, "Teleported", "We moved you to spawn!");
            }
     
           }
     
           ///called when a war ends
           @EventHandler
-          public void onPlayerLeaveWar(FactionWarsWarEndEvent event) {
+          public void onWarEnd(FactionWarsWarEndEvent event) {
             WarMap map = event.getMap();
     
             Kingdom winner = Kingdom.getKingdom(event.getWinner());
@@ -74,7 +79,7 @@ public class Factionswar implements Listener{
     
           ///called when a war starts
           @EventHandler
-          public void onPlayerLeaveWar(FactionWarsWarStartEvent event) {
+          public void onWarstart(FactionWarsWarStartEvent event) {
             Kingdom team1 = Kingdom.getKingdom(event.getTeam1());
             Kingdom team2 = Kingdom.getKingdom(event.getTeam2());
             WarMap map = event.getMap();
