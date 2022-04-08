@@ -9,28 +9,22 @@ import com.cryptomorin.xseries.messages.ActionBar;
 import com.github.citadelcraft.KingdomsXBrigde;
 
 import org.bukkit.ChatColor;
-import org.bukkit.World;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.group.model.KingdomRelation;
 import org.kingdoms.constants.player.DefaultKingdomPermission;
 import org.kingdoms.constants.player.KingdomPlayer;
 import org.kingdoms.data.DataHandler;
-import org.kingdoms.events.general.KingdomCreateEvent;
-import org.kingdoms.events.general.KingdomDisbandEvent;
-import org.kingdoms.events.members.KingdomJoinEvent;
-import org.kingdoms.events.members.KingdomLeaveEvent;
+
 
 import io.github.guipenedo.factionwars.FactionWars;
 import io.github.guipenedo.factionwars.api.TeamHandler;
 import io.github.guipenedo.factionwars.api.events.*;
-import io.github.guipenedo.factionwars.handler.TeamHandlerListener;
 import io.github.guipenedo.factionwars.models.WarMap;
 
-public class KingdomsXFw extends TeamHandler implements Listener{
+public class KingdomsXFw extends TeamHandler{
 
   KingdomsXBrigde plugin;
     
@@ -145,26 +139,6 @@ public class KingdomsXFw extends TeamHandler implements Listener{
           return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getName() : null;
         }
         return null;
-      }
-      
-      @EventHandler
-      public void onKingdomMemberJoin(KingdomJoinEvent event) {
-        TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdom().getId()));
-      }
-      
-      @EventHandler
-      public void onKingdomMemberLeave(KingdomLeaveEvent event) {
-        TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdomPlayer().getKingdomId()));
-      }
-      
-      @EventHandler
-      public void onKingdomCreate(KingdomCreateEvent event) {
-        TeamHandlerListener.onTeamCreate(event.getKingdom().getId().toString());
-      }
-      
-      @EventHandler
-      public void onKingdomDelete(KingdomDisbandEvent event) {
-        TeamHandlerListener.onTeamDelete(event.getKingdom().getId().toString());
       }
 
       ///called when a player leaves a match
