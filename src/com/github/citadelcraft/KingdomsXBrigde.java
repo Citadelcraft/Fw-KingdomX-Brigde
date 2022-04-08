@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import io.github.guipenedo.factionwars.api.FactionWarsAddonPlugin;
 import io.github.guipenedo.factionwars.api.TeamHandler;
 import io.github.guipenedo.factionwars.gamemodes.GamemodeManager;
+import io.github.guipenedo.factionwars.managers.SettingsManager;
 import io.github.guipenedo.factionwars.models.WarMap;
 
 
