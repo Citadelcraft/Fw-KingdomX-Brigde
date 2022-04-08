@@ -31,21 +31,16 @@ public class KingdomsXBrigde extends JavaPlugin implements FactionWarsAddonPlugi
 		console.sendMessage(chat.formatText("&a============================="));
 		console.sendMessage(chat.formatText(String.format("&7%s %s by &5Nostyll <3&7!", this.getName(), this.getDescription().getVersion())));
 
-		registerEvent((Listener)new Factionswar());
-		registerEvent((Listener)new KingdomsX());
-
 		if (!Bukkit.getPluginManager().isPluginEnabled("FactionWars")) {
 			getLogger().severe("*** FactionWars is not installed or not enabled. ***");
 			getLogger().severe("*** This plugin will be disabled. ***");
 			this.setEnabled(false);
 			return;
 		}
-
-
-
-		console.sendMessage(chat.formatText("&7Action: Setting up commands"));
-
 		console.sendMessage(chat.formatText("&7Action: &aEnabling&7..."));
+		registerEvent((Listener)new Factionswar());
+		registerEvent((Listener)new KingdomsX());
+		console.sendMessage(chat.formatText("&7Action: &Enabled&7..."));
 		console.sendMessage(chat.formatText("&a============================="));
 	}
 
@@ -73,8 +68,6 @@ public class KingdomsXBrigde extends JavaPlugin implements FactionWarsAddonPlugi
         ConsoleCommandSender console = Bukkit.getConsoleSender();
         console.sendMessage(chat.formatText("&a============================="));
         console.sendMessage(chat.formatText("&7FactionsWars + KingdomsX " + this.getDescription().getVersion() + " by &55Nostyll <3!"));
-        
-        
         console.sendMessage(chat.formatText("&7Action: &cDisabling&7..."));
         console.sendMessage(chat.formatText("&a============================="));
 
