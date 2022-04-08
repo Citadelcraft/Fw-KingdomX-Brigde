@@ -11,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.player.KingdomPlayer;
-import org.kingdoms.main.locale.KingdomsLang;
 
 import io.github.guipenedo.factionwars.api.events.*;
 import io.github.guipenedo.factionwars.models.WarMap;
@@ -62,9 +61,6 @@ public class Factionswar implements Listener{
                   Titles.sendTitle(player, 10, 30, 20, ChatColor.DARK_AQUA +"Teleported", "We moved you to spawn!");
                 } 
                 kp.setPvp(pvp);
-                player.sendMessage(pvp ? 
-                KingdomsLang.COMMAND_PVP_OFF.getLang() : 
-                KingdomsLang.COMMAND_PVP_ON.getLang());
               }             
             });
     
@@ -82,9 +78,6 @@ public class Factionswar implements Listener{
                   Titles.sendTitle(player, 10, 30, 20, ChatColor.DARK_AQUA + "Teleported", "We moved you to spawn!");
                 }
                 kp.setPvp(pvp);
-                player.sendMessage(pvp ? 
-                KingdomsLang.COMMAND_PVP_OFF.getLang() : 
-                KingdomsLang.COMMAND_PVP_ON.getLang());
               }
             });
     
@@ -94,9 +87,6 @@ public class Factionswar implements Listener{
           ///called when a war starts
           @EventHandler
           public void onWarstart(FactionWarsWarStartEvent event) {
-            Kingdom team1 = Kingdom.getKingdom(event.getTeam1());
-            Kingdom team2 = Kingdom.getKingdom(event.getTeam2());
-            WarMap map = event.getMap();
             boolean pvp = true;
     
             ArrayList<Player> team1players = event.getTeam1Players();
@@ -105,17 +95,11 @@ public class Factionswar implements Listener{
             team1players.forEach(player -> {
               KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
               kp.setPvp(pvp);
-              player.sendMessage(pvp ? 
-              KingdomsLang.COMMAND_PVP_OFF.getLang() : 
-              KingdomsLang.COMMAND_PVP_ON.getLang());
             });
             
             team2players.forEach(player -> {
               KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
               kp.setPvp(pvp);
-              player.sendMessage(pvp ? 
-              KingdomsLang.COMMAND_PVP_OFF.getLang() : 
-              KingdomsLang.COMMAND_PVP_ON.getLang());
             });
     
           }

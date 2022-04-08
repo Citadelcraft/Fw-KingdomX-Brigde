@@ -47,7 +47,7 @@ public class KingdomsXFw extends TeamHandler{
         Kingdom kingdom = getKingdom(Kingdomname);
         if (kingdom == null)
           return Collections.emptyList(); 
-        ArrayList<Player> arrayList = new ArrayList();
+        ArrayList<Player> arrayList = new ArrayList<Player>();
         kingdom.getOnlineMembers().forEach(Player -> {
             arrayList.add(Player);
         });
@@ -91,7 +91,7 @@ public class KingdomsXFw extends TeamHandler{
       }
       
       public List<String> getAllTeams() {
-        ArrayList<String> arrayList = new ArrayList();
+        ArrayList<String> arrayList = new ArrayList<String>();
         Collection<Kingdom> kingdoms = DataHandler.get().getKingdomManager().getKingdoms();
         kingdoms.forEach(kingdom -> {
           arrayList.add(kingdom.getName()); 
@@ -103,7 +103,7 @@ public class KingdomsXFw extends TeamHandler{
         Kingdom kingdom = getKingdom(Kingdomname);
         if (kingdom == null)
           return Collections.emptyList(); 
-        ArrayList<Player> arrayList = new ArrayList();
+        ArrayList<Player> arrayList = new ArrayList<Player>();
         if (role == TeamHandler.Role.ADMIN && FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()) != null) {
           arrayList.add(FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()));
         } else if (role == TeamHandler.Role.MODERATOR) {

@@ -1,10 +1,7 @@
 package com.github.citadelcraft.Events;
 
-import com.github.citadelcraft.KingdomsXBrigde;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.kingdoms.events.general.KingdomCreateEvent;
 import org.kingdoms.events.general.KingdomDisbandEvent;
 import org.kingdoms.events.members.KingdomJoinEvent;

@@ -16,7 +16,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import io.github.guipenedo.factionwars.api.FactionWarsAddonPlugin;
 import io.github.guipenedo.factionwars.api.TeamHandler;
 import io.github.guipenedo.factionwars.gamemodes.GamemodeManager;
-import io.github.guipenedo.factionwars.managers.SettingsManager;
 import io.github.guipenedo.factionwars.models.WarMap;
 
 
@@ -32,7 +31,7 @@ public class KingdomsXBrigde extends JavaPlugin implements FactionWarsAddonPlugi
 		console.sendMessage(chat.formatText("&a============================="));
 		console.sendMessage(chat.formatText(String.format("&7%s %s by &5Nostyll <3&7!", this.getName(), this.getDescription().getVersion())));
 
-		if (!Bukkit.getPluginManager().isPluginEnabled("FactionWars")) {
+		if (!pm.isPluginEnabled("FactionWars")) {
 			getLogger().severe("*** FactionWars is not installed or not enabled. ***");
 			getLogger().severe("*** This plugin will be disabled. ***");
 			this.setEnabled(false);
