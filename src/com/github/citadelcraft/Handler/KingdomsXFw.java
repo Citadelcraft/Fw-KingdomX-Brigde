@@ -5,10 +5,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.OfflinePlayer;
+import com.cryptomorin.xseries.messages.ActionBar;
+import com.github.citadelcraft.KingdomsXBrigde;
+
+import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.group.model.KingdomRelation;
 import org.kingdoms.constants.player.DefaultKingdomPermission;
@@ -21,31 +26,35 @@ import org.kingdoms.events.members.KingdomLeaveEvent;
 
 import io.github.guipenedo.factionwars.FactionWars;
 import io.github.guipenedo.factionwars.api.TeamHandler;
+import io.github.guipenedo.factionwars.api.events.*;
 import io.github.guipenedo.factionwars.handler.TeamHandlerListener;
+import io.github.guipenedo.factionwars.models.WarMap;
 
 public class KingdomsXFw extends TeamHandler implements Listener{
+
+  KingdomsXBrigde plugin;
     
-    public KingdomsXFw(String name) {
-        //you may add any other additional setup you need here
+    public KingdomsXFw(String name, KingdomsXBrigde plugin) {
         super(name);
+        this.plugin = plugin;
     }
 
-    private Kingdom getKingdom(String paramString) {
-        return Kingdom.getKingdom(paramString);
+    private Kingdom getKingdom(String Kingdomname) {
+        return Kingdom.getKingdom(Kingdomname);
       }
       
-      public String getTeamName(String paramString) {
-        Kingdom kingdom = getKingdom(paramString);
+      public String getTeamName(String Kingdomname) {
+        Kingdom kingdom = getKingdom(Kingdomname);
         return (kingdom != null) ? kingdom.getName() : null;
       }
       
-      public String getTeamIdByName(String paramString) {
-        Kingdom kingdom = getKingdom(paramString);
+      public String getTeamIdByName(String Kingdomname) {
+        Kingdom kingdom = getKingdom(Kingdomname);
         return (kingdom == null) ? null : kingdom.getId().toString();
       }
       
-      public List<Player> getOnlinePlayers(String paramString) {
-        Kingdom kingdom = getKingdom(paramString);
+      public List<Player> getOnlinePlayers(String Kingdomname) {
+        Kingdom kingdom = getKingdom(Kingdomname);
         if (kingdom == null)
           return Collections.emptyList(); 
         ArrayList<Player> arrayList = new ArrayList();
@@ -55,9 +64,9 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         return arrayList;
       }
       
-      public TeamHandler.Relation getRelationBetween(String paramString1, String paramString2) {
-        Kingdom kingdom1 = getKingdom(paramString1);
-        Kingdom kingdom2 = getKingdom(paramString2);
+      public TeamHandler.Relation getRelationBetween(String Kingdomname1, String Kingdomname2) {
+        Kingdom kingdom1 = getKingdom(Kingdomname1);
+        Kingdom kingdom2 = getKingdom(Kingdomname2);
         if (kingdom1 == null || kingdom2 == null)
           return null; 
         if (kingdom1.getRelationWith(kingdom2) == KingdomRelation.ALLY || kingdom1.getRelationWith(kingdom2) == KingdomRelation.NATION)
@@ -67,19 +76,27 @@ public class KingdomsXFw extends TeamHandler implements Listener{
 
         return TeamHandler.Relation.NEUTRAL;
       }
-      
-      public String getBankName(String paramString) {
-        Kingdom kingdom = getKingdom(paramString);
-        if (kingdom == null)
-          return null; 
-        return FactionWars.get().getServer().getOfflinePlayer(kingdom.getKing().getPlayer().toString()).getName();
+
+      public String getBankName(String KingdomName) {
+        return null;
       }
       
-      public void sendMessage(String paramString1, String paramString2) {
-        Kingdom kingdom = getKingdom(paramString1);
+      public double getBalance(String KingdomName) {
+        Kingdom kingdom = Kingdom.getKingdom(KingdomName);
+        return (kingdom == null) ? 0.0D : kingdom.getResourcePoints();
+      }
+      
+      public void changeBalance(String KingdomName, double rp) {
+        Kingdom kingdom = Kingdom.getKingdom(KingdomName);
+        if (kingdom != null)
+        kingdom.setResourcePoints(Double.doubleToLongBits(kingdom.getResourcePoints() + rp));
+      }
+      
+      public void sendMessage(String Kingdomname1, String Kingdomname2) {
+        Kingdom kingdom = getKingdom(Kingdomname1);
         if (kingdom != null)
           kingdom.getOnlineMembers().forEach(player -> {
-              player.sendMessage(paramString2);
+              player.sendMessage(Kingdomname2);
         });
       }
       
@@ -92,38 +109,38 @@ public class KingdomsXFw extends TeamHandler implements Listener{
         return arrayList;
       }
       
-      public List<Player> getMembersWithRole(String paramString, TeamHandler.Role paramRole) {
-        Kingdom kingdom = getKingdom(paramString);
+      public List<Player> getMembersWithRole(String Kingdomname, TeamHandler.Role role) {
+        Kingdom kingdom = getKingdom(Kingdomname);
         if (kingdom == null)
           return Collections.emptyList(); 
         ArrayList<Player> arrayList = new ArrayList();
-        if (paramRole == TeamHandler.Role.ADMIN && FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()) != null) {
+        if (role == TeamHandler.Role.ADMIN && FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()) != null) {
           arrayList.add(FactionWars.get().getServer().getPlayer(kingdom.getKing().getPlayer().getUniqueId()));
-        } else if (paramRole == TeamHandler.Role.MODERATOR) {
+        } else if (role == TeamHandler.Role.MODERATOR) {
           kingdom.getOnlineMembers().forEach(player -> {
             KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
             if (kp.hasPermission(DefaultKingdomPermission.MANAGE_RANKS)){
               arrayList.add(kp.getPlayer());
             }
           });
-        } else if (paramRole == TeamHandler.Role.NORMAL) {
-          return getOnlinePlayers(paramString);
+        } else if (role == TeamHandler.Role.NORMAL) {
+          return getOnlinePlayers(Kingdomname);
         } 
         return arrayList;
       }
       
-      public String getPlayerTeam(Object paramObject) {
-        if (paramObject instanceof String)
-          paramObject = FactionWars.get().getServer().getPlayer((String)paramObject); 
-        if (paramObject == null)
+      public String getPlayerTeam(Object player) {
+        if (player instanceof String)
+          player = FactionWars.get().getServer().getPlayer((String)player); 
+        if (player == null)
           return null; 
-        if (paramObject instanceof Player) {
-          KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
+        if (player instanceof Player) {
+          KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)player);
           Kingdom kingdom = kingdomPlayer.getKingdom();
           return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getName() : null;
         }
-        if (paramObject instanceof OfflinePlayer){
-          KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)paramObject);
+        if (player instanceof OfflinePlayer){
+          KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer((Player)player);
           Kingdom kingdom = kingdomPlayer.getKingdom();
           return (kingdomPlayer != null && kingdom != null) ? kingdomPlayer.getKingdom().getName() : null;
         }
@@ -149,4 +166,83 @@ public class KingdomsXFw extends TeamHandler implements Listener{
       public void onKingdomDelete(KingdomDisbandEvent event) {
         TeamHandlerListener.onTeamDelete(event.getKingdom().getId().toString());
       }
+
+      ///called when a player leaves a match
+      @EventHandler
+      public void onPlayerLeaveWar(FactionWarsPlayerLeaveWarEvent event) {
+       
+       WarMap map = event.getMap();
+       Player player = event.getPlayer();
+       KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
+       Kingdom kingdom = kp.getKingdom();
+
+       if (kingdom.getHome() != null){
+         player.teleport(kingdom.getHome());
+       }else if (kingdom.getNexus() != null){
+         player.teleport(kingdom.getNexus().toBukkitLocation());
+       }
+
+      }
+
+      ///called when a war ends
+      @EventHandler
+      public void onPlayerLeaveWar(FactionWarsWarEndEvent event) {
+        WarMap map = event.getMap();
+
+        Kingdom winner = Kingdom.getKingdom(event.getWinner());
+        Kingdom loser = Kingdom.getKingdom(event.getLoser());
+
+        winner.getOnlineMembers().forEach(player ->{
+          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
+          if (player.getWorld().getName().equals(map.getName())){
+            if (winner.getHome() != null){
+              player.teleport(winner.getHome());
+            }else if (winner.getNexus() != null){
+              player.teleport(winner.getNexus().toBukkitLocation());
+            }
+            kp.setPvp(false);
+            ActionBar.sendActionBar(plugin, player, ChatColor.DARK_RED + "Pvp Mode OFF", 5 * 20);
+          }
+        });
+
+        loser.getOnlineMembers().forEach(player -> {
+          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
+          if (player.getWorld().getName().equals(map.getName())){
+            if (loser.getHome() != null){
+              player.teleport(loser.getHome());
+            }else if (loser.getNexus() != null){
+              player.teleport(loser.getNexus().toBukkitLocation());
+            }
+            kp.setPvp(false);
+            ActionBar.sendActionBar(plugin, player, ChatColor.DARK_RED + "Pvp Mode OFF", 5 * 20);
+          }
+        });
+
+        
+      }
+
+      ///called when a war starts
+      @EventHandler
+      public void onPlayerLeaveWar(FactionWarsWarStartEvent event) {
+        Kingdom team1 = Kingdom.getKingdom(event.getTeam1());
+        Kingdom team2 = Kingdom.getKingdom(event.getTeam2());
+        WarMap map = event.getMap();
+
+        ArrayList<Player> team1players = event.getTeam1Players();
+        ArrayList<Player> team2players = event.getTeam2Players();
+
+        team1players.forEach(player -> {
+          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
+          kp.setPvp(true);
+          ActionBar.sendActionBar(plugin, player, ChatColor.DARK_AQUA + "Pvp Mode ON", 5 * 20);
+        });
+        
+        team2players.forEach(player -> {
+          KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
+          kp.setPvp(true);
+          ActionBar.sendActionBar(plugin, player, ChatColor.DARK_AQUA + "Pvp Mode ON", 5 * 20);
+        });
+
+      }
+
 }
