@@ -2,8 +2,6 @@ package com.github.citadelcraft.Events;
 
 import java.util.ArrayList;
 
-import com.cryptomorin.xseries.messages.Titles;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.player.KingdomPlayer;
+import org.kingdoms.utils.xseries.messages.Titles;
 
 import io.github.guipenedo.factionwars.api.events.*;
 import io.github.guipenedo.factionwars.models.WarMap;

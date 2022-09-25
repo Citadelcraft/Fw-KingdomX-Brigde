@@ -11,9 +11,9 @@ import com.github.citadelcraft.KingdomsXBrigde;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.kingdoms.constants.group.Kingdom;
-import org.kingdoms.constants.group.model.KingdomRelation;
-import org.kingdoms.constants.player.DefaultKingdomPermission;
+import org.kingdoms.constants.group.model.relationships.KingdomRelation;
 import org.kingdoms.constants.player.KingdomPlayer;
+import org.kingdoms.constants.player.StandardKingdomPermission;
 import org.kingdoms.data.DataHandler;
 
 
@@ -109,7 +109,7 @@ public class KingdomsXFw extends TeamHandler{
         } else if (role == TeamHandler.Role.MODERATOR) {
           kingdom.getOnlineMembers().forEach(player -> {
             KingdomPlayer kp = KingdomPlayer.getKingdomPlayer(player);
-            if (kp.hasPermission(DefaultKingdomPermission.MANAGE_RANKS)){
+            if (kp.hasPermission(StandardKingdomPermission.MANAGE_RANKS)){
               arrayList.add(kp.getPlayer());
             }
           });
