@@ -1,24 +1,29 @@
 package com.github.citadelcraft.Events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
 import org.kingdoms.events.general.KingdomCreateEvent;
 import org.kingdoms.events.general.KingdomDisbandEvent;
 import org.kingdoms.events.general.KingdomGUIOpenEvent;
 import org.kingdoms.events.general.KingdomRenameEvent;
+import org.kingdoms.events.general.masswar.MassWarStartEvent;
 import org.kingdoms.events.members.KingdomJoinEvent;
 import org.kingdoms.events.members.KingdomLeaveEvent;
 import org.kingdoms.gui.GUIOption;
 import org.kingdoms.gui.InteractiveGUI;
 import org.kingdoms.gui.KingdomsGUI;
+import org.kingdoms.utils.xseries.messages.Titles;
 
 import java.util.Optional;
 
 import io.github.guipenedo.factionwars.FactionWars;
 import io.github.guipenedo.factionwars.handler.TeamHandlerListener;
+import io.github.guipenedo.factionwars.managers.MatchManager;
 import io.github.guipenedo.factionwars.menus.MainMenu;
+import io.github.guipenedo.factionwars.models.WarMap;
+import net.md_5.bungee.api.ChatColor;
 
 public class KingdomsX implements Listener{
 
@@ -47,8 +52,7 @@ public class KingdomsX implements Listener{
       TeamHandlerListener.onTeamRename(event.getKingdom().getId().toString());
     }
 
-
-
+    /// We need a gui in nexus
     @EventHandler(ignoreCancelled = true)
     public void onNexusOpen(KingdomGUIOpenEvent event) {
         Player player = event.getPlayer().getPlayer();
@@ -62,6 +66,19 @@ public class KingdomsX implements Listener{
           MainMenu mainMenu = new MainMenu(player);
           mainMenu.open();
         }, new Object[0]);
-}
+  }
+
+  /// All players in war needs to be back for the Masswar!
+  @EventHandler
+  public void onMassWar(MassWarStartEvent event){
+    Bukkit.getOnlinePlayers().forEach(player -> {
+      WarMap warMap = MatchManager.get().getPlayerMap(player);
+          if (player == null) return;
+          if (warMap == null) return;
+          Titles.sendTitle(player, 10, 30, 20, ChatColor.DARK_AQUA + "GAME END", "MassWar has been started, we all need you there!");
+          MatchManager.get().endGame(warMap, true);
+    });
+
+  }
     
 }
