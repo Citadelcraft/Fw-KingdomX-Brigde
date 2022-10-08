@@ -7,6 +7,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.kingdoms.events.general.KingdomCreateEvent;
 import org.kingdoms.events.general.KingdomDisbandEvent;
 import org.kingdoms.events.general.KingdomGUIOpenEvent;
+import org.kingdoms.events.general.KingdomRenameEvent;
 import org.kingdoms.events.members.KingdomJoinEvent;
 import org.kingdoms.events.members.KingdomLeaveEvent;
 import org.kingdoms.gui.GUIOption;
@@ -23,12 +24,12 @@ public class KingdomsX implements Listener{
 
     @EventHandler
     public void onKingdomMemberJoin(KingdomJoinEvent event) {
-      TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdom().getId()));
+      TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdomPlayer().getId()));
     }
     
     @EventHandler
     public void onKingdomMemberLeave(KingdomLeaveEvent event) {
-      TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdomPlayer().getKingdomId()));
+      TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdomPlayer().getId()));
     }
     
     @EventHandler
@@ -40,6 +41,13 @@ public class KingdomsX implements Listener{
     public void onKingdomDelete(KingdomDisbandEvent event) {
       TeamHandlerListener.onTeamDelete(event.getKingdom().getId().toString());
     }
+
+    @EventHandler
+    public void onKingdomRename(KingdomRenameEvent event){
+      TeamHandlerListener.onTeamRename(event.getKingdom().getId().toString());
+    }
+
+
 
     @EventHandler(ignoreCancelled = true)
     public void onNexusOpen(KingdomGUIOpenEvent event) {
