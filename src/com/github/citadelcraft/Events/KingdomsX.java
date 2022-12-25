@@ -18,7 +18,6 @@ import org.kingdoms.utils.xseries.messages.Titles;
 
 import java.util.Optional;
 
-import io.github.guipenedo.factionwars.FactionWars;
 import io.github.guipenedo.factionwars.handler.TeamHandlerListener;
 import io.github.guipenedo.factionwars.managers.MatchManager;
 import io.github.guipenedo.factionwars.menus.MainMenu;
@@ -29,27 +28,27 @@ public class KingdomsX implements Listener{
 
     @EventHandler
     public void onKingdomMemberJoin(KingdomJoinEvent event) {
-      TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdomPlayer().getId()));
+      TeamHandlerListener.onTeamChange(event.getKingdomPlayer().getPlayer());
+    }
+
+    @EventHandler
+    public void onKingdomCreate(KingdomCreateEvent event) {
+      TeamHandlerListener.onTeamCreate(event.getKingdom().getName());
     }
     
     @EventHandler
     public void onKingdomMemberLeave(KingdomLeaveEvent event) {
-      TeamHandlerListener.onTeamChange(FactionWars.get().getServer().getPlayer(event.getKingdomPlayer().getId()));
-    }
-    
-    @EventHandler
-    public void onKingdomCreate(KingdomCreateEvent event) {
-      TeamHandlerListener.onTeamCreate(event.getKingdom().getId().toString());
+      TeamHandlerListener.onTeamChange(event.getKingdomPlayer().getPlayer());
     }
     
     @EventHandler
     public void onKingdomDelete(KingdomDisbandEvent event) {
-      TeamHandlerListener.onTeamDelete(event.getKingdom().getId().toString());
+      TeamHandlerListener.onTeamDelete(event.getKingdom().getName());
     }
 
     @EventHandler
     public void onKingdomRename(KingdomRenameEvent event){
-      TeamHandlerListener.onTeamRename(event.getKingdom().getId().toString());
+      TeamHandlerListener.onTeamRename(event.getKingdom().getName());
     }
 
     /// We need a gui in nexus
@@ -75,6 +74,7 @@ public class KingdomsX implements Listener{
       WarMap warMap = MatchManager.get().getPlayerMap(player);
           if (player == null) return;
           if (warMap == null) return;
+          Titles.clearTitle(player);
           Titles.sendTitle(player, 10, 30, 20, ChatColor.DARK_AQUA + "GAME END", "MassWar has been started, we all need you there!");
           MatchManager.get().endGame(warMap, true);
     });
