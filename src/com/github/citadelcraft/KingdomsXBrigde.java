@@ -31,7 +31,7 @@ public class KingdomsXBrigde extends JavaPlugin implements FactionWarsAddonPlugi
 		console.sendMessage(chat.formatText("&a============================="));
 		console.sendMessage(chat.formatText(String.format("&7%s %s by &5Nostyll <3&7!", this.getName(), this.getDescription().getVersion())));
 
-		if (!pm.isPluginEnabled("FactionWars") || !pm.isPluginEnabled("Kindoms")) {
+		if (!pm.isPluginEnabled("FactionWars") || !pm.isPluginEnabled("Kingdoms")) {
 			getLogger().severe("*** !! FactionWars & KindomsX are need !! ***");
 			getLogger().severe("*** FactionWars or KindomsX is not installed or not enabled. ***");
 			getLogger().severe("*** This plugin will be disabled. ***");
