@@ -4,11 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.kingdoms.constants.group.Kingdom;
+import org.kingdoms.events.general.GroupRenameEvent;
 import org.kingdoms.events.general.KingdomCreateEvent;
 import org.kingdoms.events.general.KingdomDisbandEvent;
 import org.kingdoms.events.general.KingdomGUIOpenEvent;
-import org.kingdoms.events.general.KingdomRenameEvent;
-import org.kingdoms.events.general.masswar.MassWarStartEvent;
+import org.kingdoms.events.masswar.MassWarStartEvent;
 import org.kingdoms.events.members.KingdomJoinEvent;
 import org.kingdoms.events.members.KingdomLeaveEvent;
 import org.kingdoms.gui.GUIOption;
@@ -28,7 +29,7 @@ public class KingdomsX implements Listener{
 
     @EventHandler
     public void onKingdomMemberJoin(KingdomJoinEvent event) {
-      TeamHandlerListener.onTeamChange(event.getKingdomPlayer().getPlayer());
+      TeamHandlerListener.onTeamChange(event.getPlayer().getPlayer());
     }
 
     @EventHandler
@@ -38,7 +39,7 @@ public class KingdomsX implements Listener{
     
     @EventHandler
     public void onKingdomMemberLeave(KingdomLeaveEvent event) {
-      TeamHandlerListener.onTeamChange(event.getKingdomPlayer().getPlayer());
+      TeamHandlerListener.onTeamChange(event.getPlayer().getPlayer());
     }
     
     @EventHandler
@@ -47,8 +48,9 @@ public class KingdomsX implements Listener{
     }
 
     @EventHandler
-    public void onKingdomRename(KingdomRenameEvent event){
-      TeamHandlerListener.onTeamRename(event.getKingdom().getName());
+    public void onKingdomRename(GroupRenameEvent event){
+      Kingdom kingdom = event.getPlayer().getKingdom();
+      TeamHandlerListener.onTeamRename(kingdom.getName());
     }
 
     /// We need a gui in nexus
