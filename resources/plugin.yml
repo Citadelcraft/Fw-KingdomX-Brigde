@@ -5,8 +5,8 @@ website: www.citadelcraft.com
 api-version: 1.13
 prefix: FactionsWar KingdomsX
 loadbefore: [FactionWars]
-depend: [FactionWars]
-softdepend: [Kingdoms]
+depend: [FactionWars, Kingdoms]
+softdepend: []
 description: Bring Factionswar to KingdomsX
 main: com.github.citadelcraft.KingdomsXBrigde
 
