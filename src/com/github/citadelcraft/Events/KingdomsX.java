@@ -15,6 +15,7 @@ import org.kingdoms.events.members.KingdomLeaveEvent;
 import org.kingdoms.gui.GUIOption;
 import org.kingdoms.gui.InteractiveGUI;
 import org.kingdoms.gui.KingdomsGUI;
+import org.kingdoms.gui.OptionHandler;
 import org.kingdoms.utils.xseries.messages.Titles;
 
 import java.util.Optional;
@@ -59,14 +60,11 @@ public class KingdomsX implements Listener{
         Player player = event.getPlayer().getPlayer();
         InteractiveGUI gui = event.getGUI();
         if (!gui.is(KingdomsGUI.STRUCTURES_NEXUS_NEXUS)) return;
-
-        Optional<GUIOption> optionOpt = gui.getOption("war");
-        if (!optionOpt.isPresent()) return;
-
-        gui.push("war", () ->{
-          MainMenu mainMenu = new MainMenu(player);
+        gui.push("war", () -> {
+         MainMenu mainMenu = new MainMenu(player);
           mainMenu.open();
         }, new Object[0]);
+
   }
 
   /// All players in war needs to be back for the Masswar!
