@@ -9,8 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.player.KingdomPlayer;
+import org.kingdoms.libs.xseries.messages.Titles;
 import org.kingdoms.managers.Masswar;
-import org.kingdoms.utils.xseries.messages.Titles;
 
 import io.github.guipenedo.factionwars.api.events.*;
 import io.github.guipenedo.factionwars.models.WarMap;
@@ -87,8 +87,7 @@ public class Factionswar implements Listener{
           ///called when a war starts
           @EventHandler
           public void onWarstart(FactionWarsWarStartEvent event) {
-
-            if (Masswar.isRunning()){
+            if (Masswar.getInstance().isRunning()){
               event.setCancelled(true);
             }
             boolean pvp = true;

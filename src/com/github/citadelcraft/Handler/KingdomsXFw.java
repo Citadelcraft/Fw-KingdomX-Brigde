@@ -14,8 +14,7 @@ import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.group.model.relationships.KingdomRelation;
 import org.kingdoms.constants.player.KingdomPlayer;
 import org.kingdoms.constants.player.StandardKingdomPermission;
-import org.kingdoms.data.DataHandler;
-
+import org.kingdoms.data.KingdomsDataCenter;
 
 import io.github.guipenedo.factionwars.FactionWars;
 import io.github.guipenedo.factionwars.api.TeamHandler;
@@ -92,7 +91,7 @@ public class KingdomsXFw extends TeamHandler{
       
       public List<String> getAllTeams() {
         ArrayList<String> arrayList = new ArrayList<String>();
-        Collection<Kingdom> kingdoms = DataHandler.get().getKingdomManager().getKingdoms();
+        Collection<Kingdom> kingdoms = KingdomsDataCenter.get().getKingdomManager().getKingdoms();
         kingdoms.forEach(kingdom -> {
           arrayList.add(kingdom.getName()); 
         });

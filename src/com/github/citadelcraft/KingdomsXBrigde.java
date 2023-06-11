@@ -31,15 +31,30 @@ public class KingdomsXBrigde extends JavaPlugin implements FactionWarsAddonPlugi
 		console.sendMessage(chat.formatText("&a============================="));
 		console.sendMessage(chat.formatText(String.format("&7%s %s by &5Nostyll <3&7!", this.getName(), this.getDescription().getVersion())));
 
+<<<<<<< Updated upstream
 		if (!pm.isPluginEnabled("FactionWars")) {
 			getLogger().severe("*** FactionWars is not installed or not enabled. ***");
+=======
+		if (!pm.isPluginEnabled("FactionWars") || !pm.isPluginEnabled("Kingdoms")) {
+			getLogger().severe("*** !! FactionWars & KindomsX are needed !! ***");
+			getLogger().severe("*** FactionWars or KindomsX is not installed or not enabled. ***");
+>>>>>>> Stashed changes
 			getLogger().severe("*** This plugin will be disabled. ***");
 			this.setEnabled(false);
 			return;
 		}
 		console.sendMessage(chat.formatText("&7Action: &aEnabling&7..."));
+<<<<<<< Updated upstream
 		registerEvent((Listener)new Factionswar());
 		registerEvent((Listener)new KingdomsX());
+=======
+		registerEvent((Listener) new Factionswar());
+		registerEvent((Listener) new KingdomsX());
+		// Small check to make sure that PlaceholderAPI is installed
+		//if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			//new FwarPlaceholders(this).register();
+		//}
+>>>>>>> Stashed changes
 		console.sendMessage(chat.formatText("&7Action: &Enabled&7..."));
 		console.sendMessage(chat.formatText("&a============================="));
 	}
@@ -65,11 +80,37 @@ public class KingdomsXBrigde extends JavaPlugin implements FactionWarsAddonPlugi
 
 	@Override
 	public void onDisable() {
+<<<<<<< Updated upstream
         ConsoleCommandSender console = Bukkit.getConsoleSender();
         console.sendMessage(chat.formatText("&a============================="));
         console.sendMessage(chat.formatText("&7FactionsWars + KingdomsX " + this.getDescription().getVersion() + " by &55Nostyll <3!"));
         console.sendMessage(chat.formatText("&7Action: &cDisabling&7..."));
         console.sendMessage(chat.formatText("&a============================="));
+=======
+		ConsoleCommandSender console = Bukkit.getConsoleSender();
+		console.sendMessage(chat.formatText("&a============================="));
+		console.sendMessage(chat
+				.formatText("&7FactionsWars + KingdomsX " + this.getDescription().getVersion() + " by &55Nostyll <3!"));
+		console.sendMessage(chat.formatText("&7Action: &cDisabling&7..."));
+		console.sendMessage(chat.formatText("&a============================="));
+		super.onDisable();
+		signalDisable();
+
+	}
+
+	@Override
+	public String getAddonName() {
+		return "Kingdoms-Addon-FactionsWar";
+	}
+
+	@Override
+	public File getFile() {
+		return super.getFile();
+	}
+
+	@Override
+	public void reloadAddon() {
+>>>>>>> Stashed changes
 
 	}
 

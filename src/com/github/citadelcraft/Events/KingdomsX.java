@@ -11,12 +11,15 @@ import org.kingdoms.events.general.KingdomRenameEvent;
 import org.kingdoms.events.general.masswar.MassWarStartEvent;
 import org.kingdoms.events.members.KingdomJoinEvent;
 import org.kingdoms.events.members.KingdomLeaveEvent;
-import org.kingdoms.gui.GUIOption;
 import org.kingdoms.gui.InteractiveGUI;
 import org.kingdoms.gui.KingdomsGUI;
+<<<<<<< Updated upstream
 import org.kingdoms.utils.xseries.messages.Titles;
 
 import java.util.Optional;
+=======
+import org.kingdoms.libs.xseries.messages.Titles;
+>>>>>>> Stashed changes
 
 import io.github.guipenedo.factionwars.handler.TeamHandlerListener;
 import io.github.guipenedo.factionwars.managers.MatchManager;

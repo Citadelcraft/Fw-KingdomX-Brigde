@@ -1,12 +1,17 @@
-name: Fw-Kingdoms-brigde
+name: Kingdoms-Addon-FactionsWar
 author: Nostyll
 version: ${project.version}
 website: www.citadelcraft.com
 api-version: 1.13
+<<<<<<< Updated upstream
 prefix: FactionsWar KingdomsX
 loadbefore: [FactionWars]
 depend: [FactionWars]
 softdepend: [Kingdoms]
+=======
+depend: [FactionWars, Kingdoms]
+softdepend: [PlaceholderAPI]
+>>>>>>> Stashed changes
 description: Bring Factionswar to KingdomsX
 main: com.github.citadelcraft.KingdomsXBrigde
 
