@@ -17,7 +17,6 @@ jboss/server/minimal/work/**/*
 # deployed package files #
 
 *.DEPLOYED
-pom.xml
 .vscode/settings.json
 target/
 dependency-reduced-pom.xml
